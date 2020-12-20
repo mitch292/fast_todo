@@ -1,31 +1,14 @@
-import sqlalchemy
-import databases
-from uuid import UUID
+import asyncpg
+from fastapi import FastAPI
 
-from core.config import DATABASE_URL
-database = databases.Database(DATABASE_URL)
+from core.config import DATABASE_URL, MAX_CONNECTIONS_COUNT, MIN_CONNECTIONS_COUNT
 
-# FIXME: This will eventually become a migration
-metadata = sqlalchemy.MetaData()
+async def connect_to_db(app: FastAPI) -> None:
+    app.state.pool = await asyncpg.create_pool(
+        str(DATABASE_URL),
+        min_size=MIN_CONNECTIONS_COUNT,
+        max_size=MAX_CONNECTIONS_COUNT,
+    )
 
-tasks = sqlalchemy.Table(
-    "tasks",
-    metadata,
-    sqlalchemy.Column("id", sqlalchemy.String, primary_key=True),
-    sqlalchemy.Column("description", sqlalchemy.String),
-    sqlalchemy.Column("category", sqlalchemy.String),
-    sqlalchemy.Column("is_complete", sqlalchemy.Boolean),
-)
-
-engine = sqlalchemy.create_engine(
-    DATABASE_URL, connect_args={"check_same_thread": False}
-)
-metadata.create_all(engine)
-
-# END FIXME
-
-async def connect_to_db() -> None:
-    await database.connect()
-
-async def close_db_connection() -> None:
-    await database.disconnect()
+async def close_db_connection(app: FastAPI) -> None:
+    await app.state.pool.close()
