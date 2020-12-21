@@ -4,8 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends
 
 from db.repositories.tasks import TasksRepository
-from models.schemas.task import (TaskInCreate, TaskInDelete, TaskInResponse,
-                                 TaskInUpdate)
+from models.schemas.task import TaskInCreate, TaskInDelete, TaskInResponse, TaskInUpdate
 
 from .dependencies.database import get_repository
 
