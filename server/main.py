@@ -7,10 +7,12 @@ from core.events import create_start_app_handler, create_stop_app_handler
 
 app = FastAPI(title=PROJET_NAME, debug=DEBUG, version=VERSION)
 
-origins = [
+# FIXME
+origins = [ 
     "http://localhost",
     "http://localhost:8000",
     "http://localhost:3000",
+    "http://localhost:19006",
 ]
 
 app.add_middleware(
