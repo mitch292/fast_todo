@@ -3,8 +3,10 @@ from pydantic import BaseModel, validator
 
 from uuid import UUID
 
+
 class IDModelMixin(BaseModel):
     id: UUID
+
 
 class DateTimeModelMixin(BaseModel):
     created_at: datetime.datetime = None  # type: ignore

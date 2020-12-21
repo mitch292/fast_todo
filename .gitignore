@@ -1,4 +1,3 @@
 __pycache__/
 */.env
 server/.venv
-fast_todo.db

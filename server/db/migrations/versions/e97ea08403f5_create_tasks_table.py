@@ -14,10 +14,11 @@ from sqlalchemy.dialects.postgresql import UUID
 
 
 # revision identifiers, used by Alembic.
-revision = 'e97ea08403f5'
+revision = "e97ea08403f5"
 down_revision = None
 branch_labels = None
 depends_on = None
+
 
 def create_updated_at_trigger() -> None:
     op.execute(
@@ -50,10 +51,17 @@ def timestamps() -> Tuple[sa.Column, sa.Column]:
         ),
     )
 
+
 def create_tasks_table() -> None:
     op.create_table(
         "tasks",
-        sa.Column("id", UUID(as_uuid=True), primary_key=True, default=lambda: uuid.uuid4().hex, unique=True),
+        sa.Column(
+            "id",
+            UUID(as_uuid=True),
+            primary_key=True,
+            default=lambda: uuid.uuid4().hex,
+            unique=True,
+        ),
         sa.Column("description", sa.String),
         sa.Column("category", sa.String),
         sa.Column("is_complete", sa.Boolean),
