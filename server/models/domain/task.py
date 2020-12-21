@@ -10,6 +10,7 @@ class CategoryType(str, Enum):
     REFACTOR = "refactor"
     DEV_TASK = "development_task"
     DESIGN_REQUEST = "design_request"
+    MISC = "miscellaneous"
 
 class Task(IDModelMixin, DateTimeModelMixin):
     is_complete: bool

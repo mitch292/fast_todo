@@ -1,4 +1,4 @@
-from uuid import UUID
+from uuid import UUID, uuid4
 from typing import List
 
 from db.repositories.base import BaseRepository
@@ -22,16 +22,30 @@ class TasksRepository(BaseRepository):
 
     async def create_task(self, t: TaskInCreate) -> Task:
         async with self.connection.transaction():
-            task_row = await queries.create_new_task(**t)
+            task_row = await queries.create_new_task(
+                self.connection,
+                # asyncpg blocks us from leveraging the uuidv4
+                # function we have defined on the model, so make it here instead
+                id=uuid4(),
+                description=t.description,
+                category=t.category,
+                is_complete=t.is_complete,
+            )
 
             return Task(**task_row)
-    
-    async def update_task(self, t: TaskInUpdate) -> Task:
+
+    async def update_task(self, id: UUID, t: TaskInUpdate) -> Task:
         async with self.connection.transaction():
-            task_row = await queries.update_task_by_id(**t)
+            task_row = await queries.update_task_by_id(
+                self.connection,
+                id=id,
+                description=t.description,
+                category=t.category,
+                is_complete=t.is_complete,
+            )
 
             return Task(**task_row)
-    
+
     async def delete_task(self, id: UUID) -> None:
         async with self.connection.transaction():
             await queries.delete_task_by_id(self.connection, id=id)

@@ -53,7 +53,7 @@ def timestamps() -> Tuple[sa.Column, sa.Column]:
 def create_tasks_table() -> None:
     op.create_table(
         "tasks",
-        sa.Column("id", UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, unique=True),
+        sa.Column("id", UUID(as_uuid=True), primary_key=True, default=lambda: uuid.uuid4().hex, unique=True),
         sa.Column("description", sa.String),
         sa.Column("category", sa.String),
         sa.Column("is_complete", sa.Boolean),
@@ -68,3 +68,4 @@ def upgrade():
 
 def downgrade():
     op.drop_table("tasks")
+    op.execute("DROP FUNCTION update_updated_at_column")

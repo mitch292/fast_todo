@@ -1,4 +1,5 @@
 from typing import Optional
+from uuid import UUID
 
 from pydantic import BaseModel
 
@@ -17,8 +18,7 @@ class TaskInUpdate(Task):
     description: Optional[str]
     category: Optional[CategoryType]
     is_complete: Optional[bool]
-    # TODO: figure out how to say one of these is required or 
-    # indiicate that nothing was updated
+    id: Optional[UUID]
 
-class TaskInDelete(IDModelMixin):
+class TaskInDelete(BaseModel):
     pass
