@@ -17,10 +17,7 @@ class TaskInCreate(BaseModel):
 
 
 class TaskInUpdate(Task):
-    description: Optional[str]
-    category: Optional[CategoryType]
-    is_complete: Optional[bool]
-    id: Optional[UUID]
+    pass
 
 
 class TaskInDelete(BaseModel):
