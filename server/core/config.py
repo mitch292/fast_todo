@@ -1,7 +1,6 @@
 from databases import DatabaseURL
 from starlette.config import Config
 
-
 VERSION = "0.0.0"
 config = Config(".env")
 

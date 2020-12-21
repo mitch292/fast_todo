@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
 from api.routes.tasks import task_router
+from core.config import DEBUG, PROJET_NAME, VERSION
 from core.events import create_start_app_handler, create_stop_app_handler
-from core.config import PROJET_NAME, DEBUG, VERSION
 
 app = FastAPI(title=PROJET_NAME, debug=DEBUG, version=VERSION)
 

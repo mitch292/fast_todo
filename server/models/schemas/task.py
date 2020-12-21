@@ -3,8 +3,7 @@ from uuid import UUID
 
 from pydantic import BaseModel
 
-from models.domain.task import Task, CategoryType
-from models.common import IDModelMixin
+from models.domain.task import CategoryType, Task
 
 
 class TaskInResponse(Task):

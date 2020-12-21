@@ -1,8 +1,6 @@
 from enum import Enum
 
-from pydantic import BaseModel
-
-from models.common import IDModelMixin, DateTimeModelMixin
+from models.common import DateTimeModelMixin, IDModelMixin
 
 
 class CategoryType(str, Enum):

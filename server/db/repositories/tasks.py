@@ -1,9 +1,9 @@
-from uuid import UUID, uuid4
 from typing import List
+from uuid import UUID, uuid4
 
-from db.repositories.base import BaseRepository
-from db.queries.qeuries import queries
 from db.errors import EntityDoesNotExist
+from db.queries.qeuries import queries
+from db.repositories.base import BaseRepository
 from models.domain.task import Task
 from models.schemas.task import TaskInCreate, TaskInUpdate
 

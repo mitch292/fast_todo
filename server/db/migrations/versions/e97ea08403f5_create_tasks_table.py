@@ -1,17 +1,17 @@
 """create tasks table
 
 Revision ID: e97ea08403f5
-Revises: 
+Revises:
 Create Date: 2020-12-20 13:17:10.469225
 
 """
-from typing import Tuple
 import uuid
-from alembic import op
+from typing import Tuple
+
 import sqlalchemy as sa
+from alembic import op
 from sqlalchemy import func
 from sqlalchemy.dialects.postgresql import UUID
-
 
 # revision identifiers, used by Alembic.
 revision = "e97ea08403f5"

@@ -1,12 +1,13 @@
 from typing import List
-from uuid import UUID, uuid4
+from uuid import UUID
 
-from fastapi import APIRouter, Request, Depends
+from fastapi import APIRouter, Depends
 
-from models.schemas.task import TaskInResponse, TaskInCreate, TaskInUpdate, TaskInDelete
-from models.domain.task import Task
-from .dependencies.database import get_repository
 from db.repositories.tasks import TasksRepository
+from models.schemas.task import (TaskInCreate, TaskInDelete, TaskInResponse,
+                                 TaskInUpdate)
+
+from .dependencies.database import get_repository
 
 task_router = APIRouter()
 
