@@ -3,12 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes.tasks import task_router
 from core.config import DEBUG, PROJET_NAME, VERSION
-from core.events import create_start_app_handler, create_stop_app_handler
+from db.db import database
 
 app = FastAPI(title=PROJET_NAME, debug=DEBUG, version=VERSION)
 
 # FIXME
-origins = [ 
+origins = [
     "http://localhost",
     "http://localhost:8000",
     "http://localhost:3000",
@@ -23,7 +23,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.add_event_handler("startup", create_start_app_handler(app))
-app.add_event_handler("shutdown", create_stop_app_handler(app))
+
+@app.on_event("startup")
+async def startup():
+    await database.connect()
+
+
+@app.on_event("shutdown")
+async def shutdown():
+    await database.disconnect()
+
 
 app.include_router(task_router, prefix="/tasks", tags=["tasks"])
