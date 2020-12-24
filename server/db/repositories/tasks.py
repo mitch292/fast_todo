@@ -8,7 +8,7 @@ from models.schemas.task import TaskInCreate, TaskInUpdate
 
 
 class TasksRepository:
-    """A repositoru class for working with Tasks in the database"""
+    """A repository class for working with Tasks in the database"""
 
     async def get_all_tasks(self) -> List[Task]:
         """Get all the tasks."""

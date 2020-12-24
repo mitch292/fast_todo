@@ -1,7 +1,10 @@
-from fastapi import FastAPI
+from typing import Optional
+from datetime import datetime, timedelta
+
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes.tasks import task_router
+from api.routes import tasks, auth
 from core.config import DEBUG, PROJET_NAME, VERSION
 from db.db import database
 
@@ -24,6 +27,7 @@ app.add_middleware(
 )
 
 
+
 @app.on_event("startup")
 async def startup():
     await database.connect()
@@ -34,4 +38,5 @@ async def shutdown():
     await database.disconnect()
 
 
-app.include_router(task_router, prefix="/tasks", tags=["tasks"])
+app.include_router(tasks.router, prefix="/tasks", tags=["tasks"])
+app.include_router(auth.router, prefix="/auth", tags=["auth"])

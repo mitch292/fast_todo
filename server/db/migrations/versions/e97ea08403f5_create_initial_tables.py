@@ -1,4 +1,4 @@
-"""create tasks table
+"""create initial tables
 
 Revision ID: e97ea08403f5
 Revises:
@@ -51,6 +51,31 @@ def timestamps() -> Tuple[sa.Column, sa.Column]:
         ),
     )
 
+def create_users_table() -> None:
+    op.create_table(
+        "users",
+        sa.Column(
+            "id",
+            UUID(as_uuid=True),
+            primary_key=True,
+            default=lambda: uuid.uuid4().hex,
+            unique=True,
+        ),
+        sa.Column("username", sa.String, unique=True, nullable=False, index=True),
+        sa.Column("hashed_password", sa.String),
+        sa.Column("full_name", sa.String, nullable=True, server_default=""),
+        sa.Column("is_disabled", sa.Boolean),
+        *timestamps(),
+    )
+    op.execute(
+        """
+        CREATE TRIGGER update_user_modtime
+            BEFORE UPDATE
+            ON users
+            FOR EACH ROW
+        EXECUTE PROCEDURE update_updated_at_column();
+        """
+    )
 
 def create_tasks_table() -> None:
     op.create_table(
@@ -65,15 +90,20 @@ def create_tasks_table() -> None:
         sa.Column("description", sa.String),
         sa.Column("category", sa.String),
         sa.Column("is_complete", sa.Boolean),
+        sa.Column(
+            "user_id", UUID(as_uuid=True), sa.ForeignKey("users.id")
+        ),
         *timestamps(),
     )
 
 
 def upgrade():
     create_updated_at_trigger()
+    create_users_table()
     create_tasks_table()
 
 
 def downgrade():
     op.drop_table("tasks")
+    op.drop_table("users")
     op.execute("DROP FUNCTION update_updated_at_column")
