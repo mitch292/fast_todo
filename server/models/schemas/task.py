@@ -8,14 +8,17 @@ from models.domain.task import CategoryType, Task
 class TaskInResponse(Task):
     pass
 
-
-class TaskInCreate(BaseModel):
+class BaseTask(BaseModel):
     description: str
     category: Optional[CategoryType]
     is_complete: Optional[bool] = False
 
 
-class TaskInUpdate(Task):
+class TaskInCreate(BaseTask):
+    pass
+
+
+class TaskInUpdate(BaseTask):
     pass
 
 
