@@ -5,8 +5,8 @@ Revises:
 Create Date: 2020-12-20 13:17:10.469225
 
 """
-import uuid
 from typing import Tuple
+from uuid import uuid4
 
 import sqlalchemy as sa
 from alembic import op
@@ -51,14 +51,15 @@ def timestamps() -> Tuple[sa.Column, sa.Column]:
         ),
     )
 
+
 def create_users_table() -> None:
     op.create_table(
         "users",
         sa.Column(
             "id",
-            UUID(as_uuid=True),
+            UUID,
             primary_key=True,
-            default=lambda: uuid.uuid4().hex,
+            default=uuid4,
             unique=True,
         ),
         sa.Column("username", sa.String, unique=True, nullable=False, index=True),
@@ -67,32 +68,22 @@ def create_users_table() -> None:
         sa.Column("is_disabled", sa.Boolean),
         *timestamps(),
     )
-    op.execute(
-        """
-        CREATE TRIGGER update_user_modtime
-            BEFORE UPDATE
-            ON users
-            FOR EACH ROW
-        EXECUTE PROCEDURE update_updated_at_column();
-        """
-    )
+
 
 def create_tasks_table() -> None:
     op.create_table(
         "tasks",
         sa.Column(
             "id",
-            UUID(as_uuid=True),
+            UUID,
             primary_key=True,
-            default=lambda: uuid.uuid4().hex,
+            default=uuid4,
             unique=True,
         ),
         sa.Column("description", sa.String),
         sa.Column("category", sa.String),
         sa.Column("is_complete", sa.Boolean),
-        sa.Column(
-            "user_id", UUID(as_uuid=True), sa.ForeignKey("users.id")
-        ),
+        sa.Column("user_id", UUID, sa.ForeignKey("users.id")),
         *timestamps(),
     )
 

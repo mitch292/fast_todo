@@ -1,8 +1,7 @@
 from databases import DatabaseURL
-from starlette.config import Config
-from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
-
+from passlib.context import CryptContext
+from starlette.config import Config
 
 VERSION = "0.0.0"
 config = Config(".env")
@@ -19,4 +18,4 @@ ACCESS_TOKEN_EXPIRE_MINUTES = config("ACCESS_TOKEN_EXPIRE_MINUTES", cast=int)
 
 PWD_CONTEXT = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="token")
+OAUTH2_SCHEME = OAuth2PasswordBearer(tokenUrl="auth/token/")

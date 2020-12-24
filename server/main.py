@@ -1,10 +1,10 @@
-from typing import Optional
 from datetime import datetime, timedelta
+from typing import Optional
 
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 
-from api.routes import tasks, auth
+from api.routes import auth, tasks
 from core.config import DEBUG, PROJET_NAME, VERSION
 from db.db import database
 
@@ -25,7 +25,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 
 @app.on_event("startup")

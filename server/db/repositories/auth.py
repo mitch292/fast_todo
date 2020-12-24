@@ -5,31 +5,39 @@ from core.config import PWD_CONTEXT
 from db.db import database, users
 from db.errors import EntityDoesNotExist
 from models.domain.auth import User
-from models.schemas.auth import UserInCreate, UserInDB, UserInUpdate
+from models.schemas.auth import UserInCreate, UserInResponse, UserInUpdate
 
 
 class UserRepository:
     """A repository class for working with Users in the database"""
 
-    async def get_all_users(self) -> List[UserInDB]:
+    async def get_all_users(self) -> List[UserInResponse]:
         """Get all the tasks."""
         query = users.select()
         users_rows = await database.fetch_all(query=query)
-        print('the users rows', users_rows[0].__dict__)
-        return [UserInDB(**user) for user in users_rows]
+        return [UserInResponse(**user) for user in users_rows]
 
-    async def get_user_by_id(self, id: UUID) -> UserInDB:
+    async def get_user_by_username(self, username: str) -> UserInResponse:
+        """Get a single user by ID."""
+        query = users.select().where(username == users.c.username)
+        user_row = await database.fetch_one(query=query)
+
+        if user_row:
+            return UserInResponse(**user_row)
+
+        raise EntityDoesNotExist("user with id {0} does not exist".format(id))
+
+    async def get_user_by_id(self, id: UUID) -> UserInResponse:
         """Get a single user by ID."""
         query = users.select().where(id == users.c.id)
         user_row = await database.fetch_one(query=query)
 
         if user_row:
-            print('the user row', dict(user_row))
-            return UserInDB(**user_row)
+            return UserInResponse(**user_row)
 
         raise EntityDoesNotExist("user with id {0} does not exist".format(id))
 
-    async def create_user(self, u: UserInCreate) -> UserInDB:
+    async def create_user(self, u: UserInCreate) -> UserInResponse:
         """Create a user in the database, then return it."""
         new_id = uuid4()
         query = users.insert().values(
@@ -39,17 +47,16 @@ class UserRepository:
             full_name=u.full_name,
             is_disabled=u.is_disabled,
         )
-        # FIXME: We should need to execute two queries here
         await database.execute(query=query)
         return await self.get_user_by_id(new_id)
 
-    async def update_task(self, id: UUID, u: UserInUpdate) -> UserInDB:
+    async def update_task(self, id: UUID, u: UserInUpdate) -> UserInResponse:
         """Update a specific user"""
         query = (
             users.update()
             .where(id == users.c.id)
             .values(
-                id=new_id,
+                id=id,
                 username=u.username,
                 hashed_password=PWD_CONTEXT.hash(u.password),
                 full_name=u.full_name,
