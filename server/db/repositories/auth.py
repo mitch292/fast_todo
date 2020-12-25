@@ -1,9 +1,11 @@
 from typing import List
 from uuid import UUID, uuid4
 
+from asyncpg.exceptions import UniqueViolationError
+
 from core.config import PWD_CONTEXT
 from db.db import database, users
-from db.errors import EntityDoesNotExist
+from db.errors import EntityDoesNotExist, EntityAlreadyExists
 from models.schemas.auth import UserInCreate, UserInResponse, UserInUpdate
 
 
@@ -39,6 +41,7 @@ class UserRepository:
     async def create_user(self, u: UserInCreate) -> UserInResponse:
         """Create a user in the database, then return it."""
         new_id = uuid4()
+
         query = users.insert().values(
             id=new_id,
             username=u.username,
@@ -46,7 +49,12 @@ class UserRepository:
             full_name=u.full_name,
             is_disabled=u.is_disabled,
         )
-        await database.execute(query=query)
+
+        try:
+            await database.execute(query=query)
+        except UniqueViolationError:
+            raise EntityAlreadyExists
+
         return await self.get_user_by_id(new_id)
 
     async def update_task(self, id: UUID, u: UserInUpdate) -> UserInResponse:

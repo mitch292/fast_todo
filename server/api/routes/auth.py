@@ -9,6 +9,7 @@ from api.dependencies.auth import (authenticate_user, create_access_token,
 from core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from db.repositories.auth import UserRepository
 from models.schemas.auth import Token, UserInCreate, UserInResponse
+from db.errors import EntityAlreadyExists
 
 router = APIRouter()
 
@@ -25,10 +26,21 @@ async def list_users(users_repo=Depends(UserRepository)):
     return await users_repo.get_all_users()
 
 
-@router.post("/users/", response_model=UserInResponse)
+@router.post("/users/", response_model=Token)
 async def register_user(new_user: UserInCreate, users_repo=Depends(UserRepository)):
-    return await users_repo.create_user(new_user)
-
+    try:
+        await users_repo.create_user(new_user)
+    except EntityAlreadyExists:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username already exists",
+        )
+    authenticated_user = await authenticate_user(new_user.username, new_user.password)
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(
+        data={"sub": authenticated_user.username}, expires_delta=access_token_expires  # type: ignore
+    )
+    return {"access_token": access_token, "token_type": "bearer"}
 
 @router.post("/token/", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
