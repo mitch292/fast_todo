@@ -1,7 +1,4 @@
-from datetime import datetime, timedelta
-from typing import Optional
-
-from fastapi import Depends, FastAPI, HTTPException, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from api.routes import auth, tasks

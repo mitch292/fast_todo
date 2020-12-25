@@ -8,6 +8,7 @@ from models.domain.task import CategoryType, Task
 class TaskInResponse(Task):
     pass
 
+
 class BaseTask(BaseModel):
     description: str
     category: Optional[CategoryType]

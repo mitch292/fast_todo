@@ -4,11 +4,8 @@ from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 
-from api.dependencies.auth import (
-    authenticate_user,
-    create_access_token,
-    get_current_active_user,
-)
+from api.dependencies.auth import (authenticate_user, create_access_token,
+                                   get_current_active_user)
 from core.config import ACCESS_TOKEN_EXPIRE_MINUTES
 from db.repositories.auth import UserRepository
 from models.schemas.auth import Token, UserInCreate, UserInResponse

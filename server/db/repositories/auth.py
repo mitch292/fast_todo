@@ -4,7 +4,6 @@ from uuid import UUID, uuid4
 from core.config import PWD_CONTEXT
 from db.db import database, users
 from db.errors import EntityDoesNotExist
-from models.domain.auth import User
 from models.schemas.auth import UserInCreate, UserInResponse, UserInUpdate
 
 

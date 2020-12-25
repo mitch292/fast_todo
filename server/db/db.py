@@ -1,17 +1,8 @@
 from uuid import uuid4
 
 from databases import Database
-from sqlalchemy import (
-    TIMESTAMP,
-    Boolean,
-    Column,
-    ForeignKey,
-    Integer,
-    MetaData,
-    String,
-    Table,
-    create_engine,
-)
+from sqlalchemy import (TIMESTAMP, Boolean, Column, ForeignKey,
+                        MetaData, String, Table, create_engine)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
 

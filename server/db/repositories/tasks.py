@@ -34,7 +34,7 @@ class TasksRepository:
             description=t.description,
             category=t.category,
             is_complete=t.is_complete,
-            user_id=user_id
+            user_id=user_id,
         )
         # FIXME: We should need to execute two queries here
         await database.execute(query=query)

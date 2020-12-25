@@ -3,19 +3,13 @@ from typing import Optional, Union
 
 from fastapi import Depends, HTTPException
 from jose import JWTError, jwt
-from passlib.context import CryptContext
 
 from api.errors import invalid_credentials_exception
-from core.config import (
-    ACCESS_TOKEN_EXPIRE_MINUTES,
-    ALGORITHM,
-    OAUTH2_SCHEME,
-    PWD_CONTEXT,
-    SECRET_KEY,
-)
+from core.config import (ALGORITHM, OAUTH2_SCHEME,
+                         PWD_CONTEXT, SECRET_KEY)
 from db.db import database, users
-from db.repositories.auth import UserRepository
-from models.schemas.auth import TokenData, UserInCreate, UserInDB, UserInResponse
+from models.schemas.auth import (TokenData, UserInDB,
+                                 UserInResponse)
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
