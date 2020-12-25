@@ -46,7 +46,6 @@ class UserRepository:
             id=new_id,
             username=u.username,
             hashed_password=PWD_CONTEXT.hash(u.password),
-            full_name=u.full_name,
             is_disabled=u.is_disabled,
         )
 
@@ -66,7 +65,6 @@ class UserRepository:
                 id=id,
                 username=u.username,
                 hashed_password=PWD_CONTEXT.hash(u.password),
-                full_name=u.full_name,
                 is_disabled=u.is_disabled,
             )
         )

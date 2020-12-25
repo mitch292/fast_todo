@@ -64,7 +64,6 @@ def create_users_table() -> None:
         ),
         sa.Column("username", sa.String, unique=True, nullable=False, index=True),
         sa.Column("hashed_password", sa.String),
-        sa.Column("full_name", sa.String, nullable=True, server_default=""),
         sa.Column("is_disabled", sa.Boolean),
         *timestamps(),
     )

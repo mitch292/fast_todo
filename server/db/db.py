@@ -51,7 +51,6 @@ users = Table(
         unique=True,
     ),
     Column("username", String),
-    Column("full_name", String),
     Column("hashed_password", String),
     Column("is_disabled", Boolean),
     Column(

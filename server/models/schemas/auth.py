@@ -15,7 +15,6 @@ class TokenData(BaseModel):
 
 class BaseUser(BaseModel):
     username: str
-    full_name: Optional[str] = None
     is_disabled: bool = False
 
 
@@ -37,4 +36,3 @@ class UserInUpdate(BaseModel):
     username: str
     password: str
     is_disabled: bool = False
-    full_name: Optional[str] = None

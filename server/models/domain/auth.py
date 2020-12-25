@@ -7,4 +7,3 @@ class User(IDModelMixin, DateTimeModelMixin):
     username: str
     is_disabled: bool = False
     hashed_password: str
-    full_name: Optional[str] = None
